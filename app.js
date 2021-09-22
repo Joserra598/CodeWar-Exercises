@@ -86,17 +86,14 @@ const likes = (names) => {
 	if (static.length > 2) total = total.replace(" and", ",");
 	if (names.length >= 4) total = total.replace(static[2], `${names.length - 2} others`);
 
-	return `${static.length === 0 ? "no one" : `${total}`} ${
-		names.length < 2 ? "likes" : "like"
-	} this`;
+	return `${static.length === 0 ? "no one" : `${total}`} ${names.length < 2 ? "likes" : "like"} this`;
 };
 
 // console.log(likes([]));
 
 // console.log(likes(["Alex", "Jacob", "Mark", "Max", "Omar", "Miguel"]));
 
-const uniqueInOrder = (iterable) =>
-	[...iterable].filter((val, i, iterable) => val !== iterable[i + 1]);
+const uniqueInOrder = (iterable) => [...iterable].filter((val, i, iterable) => val !== iterable[i + 1]);
 // console.log(uniqueInOrder([1, 2, 2, 3, 3]));
 // uniqueInOrder([1, 2, 2, 3, 3]);
 
@@ -105,11 +102,7 @@ const findOutlier = (integers) => {
 	const [first, second, thrid] = integers;
 	let type;
 
-	first % 2 === second % 2
-		? (type = first)
-		: second % 2 === thrid % 2
-		? (type = second)
-		: (type = first);
+	first % 2 === second % 2 ? (type = first) : second % 2 === thrid % 2 ? (type = second) : (type = first);
 
 	return integers[integers.findIndex((val) => Math.abs(val % 2) !== Math.abs(type % 2))];
 };
@@ -213,4 +206,18 @@ const anagrams = (word, words) => {
 	});
 };
 
-console.log(anagrams("laser", ["lazing", "lazy", "lacer"]));
+// console.log(anagrams("laser", ["lazing", "lazy", "lacer"]));
+
+const cakes = (recipe, available) => {
+	if (Object.keys(recipe).length > Object.keys(available).length) return 0;
+	return Object.keys(recipe).reduce((acc, ingredient) => {
+		if (!available.hasOwnProperty(ingredient)) acc = false;
+		if (available.hasOwnProperty(ingredient)) {
+			const cant = Math.floor(available[ingredient] / recipe[ingredient]);
+			if (acc > cant || (acc === 0 && acc !== false)) acc = cant;
+		}
+		return acc;
+	}, 0);
+};
+
+cakes({ flour: 500, sugar: 200, eggs: 1 }, { flour: 1200, sugar: 1200, eggs: 5, milk: 200 });
