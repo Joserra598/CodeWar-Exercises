@@ -282,3 +282,63 @@ const parseInt = (string) => {
 };
 
 // parseInt("four hundred fifty-six thousand seven hundred eighty-nine");
+
+const doneOrNot = (board) => {
+	let status = "Try again!";
+	if (board.length !== 9) return status;
+	let sections = [];
+
+	for (let i = 0; i < board.length; i++) {
+		// obtengo los numeros de las filas
+		const row = new Set([...board[i]]);
+		if (row.size != 9) break;
+
+		// obtengo las columnas
+
+		let col = [];
+		for (let j = 0; j < board.length; j++) col.push(board[j][i]);
+		col = new Set([...col]);
+
+		if (col.size != 9) break;
+
+		// Separamos las secciones
+		if (i % 3 === 0) sections = [];
+
+		const left = board[i].slice(0, 3),
+			center = board[i].slice(3, 6),
+			right = board[i].slice(6, 9);
+
+		if (!sections[0]) {
+			sections = [[...left], [...center], [...right]];
+		} else {
+			sections = [
+				[...sections[0], ...left],
+				[...sections[1], ...center],
+				[...sections[2], ...right],
+			];
+		}
+
+		if (i === 2 || i === 5 || i === 8) {
+			const right = new Set([...sections[0]]);
+			const center = new Set([...sections[1]]);
+			const left = new Set([...sections[2]]);
+			if ((right.size || center.size || left.size) != 9) break;
+		}
+
+		if (i === board.length - 1) status = "Finished!";
+	}
+
+	return status;
+};
+
+doneOrNot([
+	[5, 3, 4, 6, 7, 8, 9, 1, 2],
+	[6, 7, 2, 1, 9, 5, 3, 4, 8],
+	[1, 9, 8, 3, 4, 2, 5, 6, 7],
+	[8, 5, 9, 7, 6, 1, 4, 2, 3],
+	[4, 2, 6, 8, 5, 3, 7, 9, 1],
+	[7, 1, 3, 9, 2, 4, 8, 5, 6],
+	[9, 6, 1, 5, 3, 7, 2, 8, 4],
+	[2, 8, 7, 4, 1, 9, 6, 3, 5],
+	[3, 4, 5, 2, 8, 6, 1, 7, 9],
+]);
